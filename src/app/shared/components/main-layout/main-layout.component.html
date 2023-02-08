@@ -2,6 +2,10 @@
     <h1>My Blog</h1>
 </div>
 
+<div class="btn__admin-link">
+    <a [routerLink]="['/admin', 'dashboard']" class="admin-link">Панель Адміністратора</a>
+</div>
+
 <div class="container">
     <router-outlet></router-outlet>
 </div>

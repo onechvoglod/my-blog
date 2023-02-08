@@ -1,21 +1,20 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http"
+import { HttpClient } from "@angular/common/http"
 import { catchError, Observable, Subject, tap, throwError } from "rxjs";
 import { environment } from "src/app/environments/environment";
-import { User } from "src/app/shared/interface";
-import { NgSwitchCase } from "@angular/common";
+import { FbAuthResponse, User } from "src/app/shared/interface";
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AuthServices {
 
-    public error$: Subject<any> = new Subject<any>;
+    public error$: Subject<any> = new Subject<string>();
 
     constructor(private http: HttpClient) { }
 
     get token() {
-        const expDate = new Date(localStorage.getItem('fb-token-exp')!)
+        const expDate = new Date(<any>localStorage.getItem('fb-token-exp'))
         if (new Date() > expDate) {
-            this.loguot();
+            this.logout();
             return null
         }
         return localStorage.getItem('fb-token')
@@ -30,7 +29,7 @@ export class AuthServices {
             )
     }
 
-    public loguot() {
+    public logout() {
         this.setToken(null);
     }
 

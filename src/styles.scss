@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
+@import "~quill/dist/quill.core.css";
+@import "~quill/dist/quill.snow.css";
 
 :root {
   --primary-color: #dc3545;
@@ -281,15 +283,5 @@ table th {
     color: var(--dark-color);
     font-weight: bold;
     cursor: default;
-  }
-
-  a {
-    color: #fff;
-    padding: 0.45rem;
-    margin: 0 0.25rem;
-
-    &:hover {
-      color: var(--light-color);
-    }
   }
 }

@@ -7,7 +7,12 @@ import { DashboardPageComponent } from './dashboard-page/dashboard-page.componen
 import { CreatePageComponent } from './create-page/create-page.component';
 import { EditPageComponent } from './edit-page/edit-page.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { AuthServices } from "./shared/components/admin-layout/services/auth.service";
+import { AuthGuard } from "./shared/services/auth.guard";
+import { QuillModule } from "ngx-quill";
+import { SharedModule } from "../shared/shared.module";
+import { SearchPipe } from "./shared/search.pipe";
+import { AlertComponent } from "./shared/components/alert/alert.component";
+import { AlertService } from "./shared/services/alert.service";
 
 @NgModule({
     declarations: [
@@ -15,31 +20,35 @@ import { AuthServices } from "./shared/components/admin-layout/services/auth.ser
         LoginPageComponent,
         DashboardPageComponent,
         CreatePageComponent,
-        EditPageComponent
-    ],
-    providers: [
-        AuthServices
+        EditPageComponent,
+        SearchPipe,
+        AlertComponent
     ],
     imports: [
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
+        SharedModule,
+        QuillModule.forRoot(),
         RouterModule.forChild([
             {
                 path: '', component: AdminLayoutComponent, children: [
                     { path: '', redirectTo: '/admin/login', pathMatch: 'full' },
                     { path: 'login', component: LoginPageComponent },
-                    { path: 'dashboard', component: DashboardPageComponent },
-                    { path: 'create', component: CreatePageComponent },
-                    { path: 'post/:id/edit', component: EditPageComponent },
+                    { path: 'dashboard', component: DashboardPageComponent, canActivate: [AuthGuard] },
+                    { path: 'create', component: CreatePageComponent, canActivate: [AuthGuard] },
+                    { path: 'post/:id/edit', component: EditPageComponent, canActivate: [AuthGuard] },
                 ]
             }
         ])
     ],
     exports: [
         RouterModule,
-        DashboardPageComponent
-    ]
+    ],
+    providers: [
+        AuthGuard,
+        AlertService,
+    ],
 })
 
 export class AdminModule {

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/shared/interface';
-import { AuthServices } from '../shared/components/admin-layout/services/auth.service';
+import { AuthServices } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -13,12 +13,22 @@ export class LoginPageComponent implements OnInit {
 
   public form: FormGroup;
   public submited = false;
+  public message: String;
 
-  constructor(public auth: AuthServices, private router: Router) {
-
-  }
+  constructor(
+    public auth: AuthServices,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['loginAgain']) {
+        this.message = 'Будь ласка, введіть данні'
+      } else if (params['authFailed']) {
+        this.message = 'Cесія закінчилася. Будь ласка, введіть дані заново'
+      }
+    })
+
     this.form = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [Validators.required, Validators.minLength(6)])
